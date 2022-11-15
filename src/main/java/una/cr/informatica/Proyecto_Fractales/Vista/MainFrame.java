@@ -122,8 +122,10 @@ public class MainFrame extends javax.swing.JFrame {
         frameHeight = 1000;
         this.tamOld = 1;
         this.tamMax = 500;
-        this.aperturaAngulosSlicer.setMinimum(-90);
-        this.alturaSlicer.setValue(7);
+        this.aperturaAngulosSlicer.setValue(25);
+        this.alturaSlicer.setValue(100);
+        this.inclinacionSlicer.setValue(-90);
+        this.cantidadRamasSlider.setValue(7);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setBounds(100, 0, frameWidth, frameHeight);
     }
@@ -133,7 +135,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         try {
             //drawFractalTree(g, WINDOW_WIDTH / 2, WINDOW_HEIGHT - 75, -90, 4,25);
-            dibujaArbol(g, WINDOW_WIDTH / 2, WINDOW_HEIGHT + 100 , -90, alturaSlicer.getValue(), 25);
+            dibujaArbol(g, WINDOW_WIDTH / 2, WINDOW_HEIGHT + alturaSlicer.getValue(), inclinacionSlicer.getValue(), cantidadRamasSlider.getValue(), aperturaAngulosSlicer.getValue());
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -207,8 +209,7 @@ public class MainFrame extends javax.swing.JFrame {
             repaint();
             drawFractalTree(g, x2, y2, angle + angle1, depth - 1, angle1);
             drawFractalTree(g, x2, y2, angle - angle1, depth - 1, angle1);
-        } else
-            return;
+        } else return;
     }
 
     @SuppressWarnings("unchecked")
@@ -224,42 +225,25 @@ public class MainFrame extends javax.swing.JFrame {
         setTitle("Fractal");
         setBackground(new java.awt.Color(204, 255, 204));
 
-        alturaSlicer.setMaximum(10);
-        alturaSlicer.setMinimum(1);
+        alturaSlicer.setMaximum(270);
+        alturaSlicer.setMinimum(-270);
         alturaSlicer.setOrientation(javax.swing.JSlider.VERTICAL);
 
-        inclinacionSlicer.setMaximum(180);
+        inclinacionSlicer.setMaximum(270);
+        inclinacionSlicer.setMinimum(-90);
         inclinacionSlicer.setOrientation(javax.swing.JSlider.VERTICAL);
 
         aperturaAngulosSlicer.setMaximum(180);
         aperturaAngulosSlicer.setOrientation(javax.swing.JSlider.VERTICAL);
 
-        cantidadRamasSlider.setMaximum(12);
+        cantidadRamasSlider.setMaximum(10);
         cantidadRamasSlider.setMinimum(1);
         cantidadRamasSlider.setOrientation(javax.swing.JSlider.VERTICAL);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                                .addContainerGap(332, Short.MAX_VALUE)
-                                .addComponent(cantidadRamasSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(aperturaAngulosSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(inclinacionSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(alturaSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap())
-        );
-        layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(aperturaAngulosSlicer, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
-                        .addComponent(inclinacionSlicer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(alturaSlicer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cantidadRamasSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
+        layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup().addContainerGap(332, Short.MAX_VALUE).addComponent(cantidadRamasSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(aperturaAngulosSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(inclinacionSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED).addComponent(alturaSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE).addContainerGap()));
+        layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(aperturaAngulosSlicer, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE).addComponent(inclinacionSlicer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(alturaSlicer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE).addComponent(cantidadRamasSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
         pack();
     }// </editor-fold>//GEN-END:initComponents
 

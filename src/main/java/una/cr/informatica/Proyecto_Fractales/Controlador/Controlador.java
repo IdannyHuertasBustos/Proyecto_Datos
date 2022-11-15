@@ -15,7 +15,7 @@ import una.cr.informatica.Proyecto_Fractales.Vista.MainFrame;
  */
 public class Controlador {
     private MainFrame main;
-    
+
     public Controlador(){
         this.main = new MainFrame();
         Arbol arbolito = new Arbol();
@@ -23,6 +23,9 @@ public class Controlador {
     }
     public void cargaEventos(){
         eventoAlturaSlider();
+        eventoAperturaAngulosSlider();
+        eventoCantidadRamasSlider();
+        eventoInclinacionSlicer();
     }
     public void eventoAlturaSlider(){
         this.main.getAlturaSlicer().addChangeListener(new ChangeListener() {
@@ -32,7 +35,7 @@ public class Controlador {
                 switch(main.getAlturaSlicer().getValue()){
                     case 1:
                         value = 500;
-                    case 2,3,4,5,6,7,8,9,10,11,12: 
+                    case 2,3,4,5,6,7,8,9,10,11,12:
                         if(main.getAlturaSlicer().getValue() > main.getTamOld()){
                             value = main.getTamMax() - 32;
                             main.setTamOld(main.getTamOld() + 1);
@@ -46,17 +49,17 @@ public class Controlador {
                 main.repaint();
             }
         });
-    }    
-    public void eventoAnguloSlider(){
-        this.main.getAlturaSlicer().addChangeListener(new ChangeListener() {
+    }
+    public void eventoAperturaAngulosSlider(){
+        this.main.getAperturaAngulosSlicer().addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent event) {
-                int value = main.getAlturaSlicer().getValue();
+                int value = main.getAperturaAngulosSlicer().getValue();
                 System.out.println(value);
-                switch(main.getAlturaSlicer().getValue()){
+                switch(main.getAperturaAngulosSlicer().getValue()){
                     case 1:
                         value = 500;
-                    case 2,3,4,5,6,7,8,9,10,11,12: 
-                        if(main.getAlturaSlicer().getValue() > main.getTamOld()){
+                    case 2,3,4,5,6,7,8,9,10,11,12:
+                        if(main.getAperturaAngulosSlicer().getValue() > main.getTamOld()){
                             value = main.getTamMax() - 32;
                             main.setTamOld(main.getTamOld() + 1);
                         }
@@ -69,7 +72,54 @@ public class Controlador {
                 main.repaint();
             }
         });
-    }    
+    }
+    public void eventoCantidadRamasSlider(){
+        this.main.getCantidadRamasSlider().addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent event) {
+                int value = main.getCantidadRamasSlider().getValue();
+                System.out.println(value);
+                switch(main.getCantidadRamasSlider().getValue()){
+                    case 1:
+                        value = 500;
+                    case 2,3,4,5,6,7,8,9,10,11,12:
+                        if(main.getCantidadRamasSlider().getValue() > main.getTamOld()){
+                            value = main.getTamMax() - 32;
+                            main.setTamOld(main.getTamOld() + 1);
+                        }
+                        else{
+                            value = main.getTamMax() + 32;
+                            main.setTamOld(main.getTamOld() - 1);
+                        }
+                }
+                main.setTamMax(value);
+                main.repaint();
+            }
+        });
+    }
+    public void eventoInclinacionSlicer(){
+        this.main.getInclinacionSlicer().addChangeListener(new ChangeListener() {
+            public void stateChanged(ChangeEvent event) {
+                int value = main.getInclinacionSlicer().getValue();
+                System.out.println(value);
+                switch(main.getInclinacionSlicer().getValue()){
+                    case 1:
+                        value = 500;
+                    case 2,3,4,5,6,7,8,9,10,11,12:
+                        if(main.getInclinacionSlicer().getValue() > main.getTamOld()){
+                            value = main.getTamMax() - 32;
+                            main.setTamOld(main.getTamOld() + 1);
+                        }
+                        else{
+                            value = main.getTamMax() + 32;
+                            main.setTamOld(main.getTamOld() - 1);
+                        }
+                }
+                main.setTamMax(value);
+                main.repaint();
+            }
+        });
+    }
+
     public void startApplication(){
         this.main.setVisible(true);
     }
