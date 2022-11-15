@@ -13,22 +13,27 @@ import java.awt.RenderingHints;
 import java.awt.Toolkit;
 import java.awt.geom.Line2D;
 import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
- *
  * @author Asus
  */
 public class MainFrame extends javax.swing.JFrame {
-   private int frameWidth;
-   private int frameHeight;
-   private int tamMax;
-   private int incMax;
-   private int angMax;
-   private int tamOld;
-   static public double deg_2_rad = Math.PI / 180.0;
-   private final int WINDOW_WIDTH = 1280;
-private final int WINDOW_HEIGHT = 720;
-    
+    private int frameWidth;
+    private int frameHeight;
+    private int tamMax;
+    private int incMax;
+    private int angMax;
+    private int tamOld;
+    static public double deg_2_rad = Math.PI / 180.0;
+    private final int WINDOW_WIDTH = 1280;
+    private final int WINDOW_HEIGHT = 720;
+
+    public static final Color LIGHT_BROWN = new Color(153, 102, 0);
+    public static final Color BROWN = new Color(102, 51, 0);
+    public static final Color VERDE_MUSGO = new Color(102, 100, 0);
+
     public int getTamOld() {
         return tamOld;
     }
@@ -36,6 +41,7 @@ private final int WINDOW_HEIGHT = 720;
     public void setTamOld(int tamOld) {
         this.tamOld = tamOld;
     }
+
     public int getFrameWidth() {
         return frameWidth;
     }
@@ -59,6 +65,7 @@ private final int WINDOW_HEIGHT = 720;
     public void setTamMax(int tamMax) {
         this.tamMax = tamMax;
     }
+
     public int getIncMax() {
         return incMax;
     }
@@ -107,68 +114,103 @@ private final int WINDOW_HEIGHT = 720;
     public void setInclinacionSlicer(JSlider inclinacionSlicer) {
         this.inclinacionSlicer = inclinacionSlicer;
     }
-   
+
     public MainFrame() {
         initComponents();
         this.getContentPane().setBackground(new java.awt.Color(204, 255, 204));
         frameWidth = 1280;
-        frameHeight = 1700;
+        frameHeight = 1000;
         this.tamOld = 1;
         this.tamMax = 500;
-        this.alturaSlicer.setValue(1);
+        this.aperturaAngulosSlicer.setMinimum(-90);
+        this.alturaSlicer.setValue(7);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         this.setBounds(100, 0, frameWidth, frameHeight);
     }
+
     public void paint(Graphics g) {
-        super.paint(g); 
-        g.setColor(Color.green);
-        try{
-         //drawFractalTree(g, WINDOW_WIDTH / 2, WINDOW_HEIGHT - 75, -90, 4,25);
-         dibujaArbol(g, WINDOW_WIDTH / 2, WINDOW_HEIGHT - 75, -90.0, 8, 25);
-        }
-        catch(Exception ex){
+        super.paint(g);
+
+        try {
+            //drawFractalTree(g, WINDOW_WIDTH / 2, WINDOW_HEIGHT - 75, -90, 4,25);
+            dibujaArbol(g, WINDOW_WIDTH / 2, WINDOW_HEIGHT + 100 , -90, alturaSlicer.getValue(), 25);
+        } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
-     private void dibujaArbol(Graphics g,int x1, int y1, double angle, int depth, double angle1)
-        {
-            try
-            {
-                if (depth != 0)
-                {
-                   // Thread.sleep(100);//It has a catch exception here;
-                    int x2 = (int)(x1 + (Math.cos(Math.toRadians(angle)) * depth * 10.0));
-                    int y2 = (int)(y1 + (Math.sin(Math.toRadians(angle)) * depth * 10.0));
-                    //this.repaint();
-                    g.drawLine(x1, y1, x2, y2);
-                    
-                    dibujaArbol(g,x2, y2, angle - angle1, depth - 1, angle1);
-                    dibujaArbol(g,x2, y2, angle, depth - 1, angle1);
-                    dibujaArbol(g,x2, y2, angle + angle1, depth - 1, angle1);
 
+    private void dibujaArbol(Graphics g, int x1, int y1, double angle, int depth, double angle1) {
+        try {
+
+            if (depth != 0) {
+                switch (depth) {
+                    case 1: {
+                        g.setColor(Color.RED);
+                        break;
+                    }
+                    case 2: {
+                        g.setColor(Color.ORANGE);
+                        break;
+                    }
+                    case 3: {
+                        g.setColor(Color.YELLOW);
+                        break;
+                    }
+                    case 4: {
+                        g.setColor(Color.GREEN);
+                        break;
+                    }
+                    case 5: {
+                        g.setColor(VERDE_MUSGO);
+                        break;
+                    }
+                    case 6: {
+                        g.setColor(LIGHT_BROWN);
+                        break;
+                    }
+                    case 7: {
+                        g.setColor(BROWN);
+                        break;
+                    }
+                    default:
+                        g.setColor(BROWN);
+                        break;
                 }
+                // Thread.sleep(100);//It has a catch exception here;
+                int x2 = (int) (x1 + (Math.cos(Math.toRadians(angle)) * depth * 15.0));
+                int y2 = (int) (y1 + (Math.sin(Math.toRadians(angle)) * depth * 15.0));
+                //
+                Graphics2D g2d = (Graphics2D) g;
+                g2d.setStroke(new BasicStroke(5));
+                g2d.draw(new Line2D.Float(x1, y1, x2, y2));
+
+                dibujaArbol(g2d, x2, y2, angle - angle1, depth - 1, angle1);
+                dibujaArbol(g2d, x2, y2, angle, depth - 1, angle1);
+                dibujaArbol(g2d, x2, y2, angle + angle1, depth - 1, angle1);
+
+
             }
-            catch (Exception ex)
-            {
-                System.out.println(ex);
-            }
+        } catch (Exception ex) {
+            System.out.println(ex);
         }
-  public void drawFractalTree(Graphics g, int x1, int y1, double angle, int depth,double angle1) throws InterruptedException {
+    }
 
-    if (depth != 0) {
-    //Thread.sleep(100);//It has a catch exception here;
-    int x2 = (int)(x1 + (Math.cos(Math.toRadians(angle)) * depth * 10.0));
-    int y2 = (int)(y1 + (Math.sin(Math.toRadians(angle)) * depth * 10.0));
+    public void drawFractalTree(Graphics g, int x1, int y1, double angle, int depth, double angle1) throws InterruptedException {
 
-    Graphics2D g2d = (Graphics2D) g;
-    g2d.drawLine(x1, y1, x2, y2);
-    repaint();
-    drawFractalTree(g, x2, y2, angle + angle1, depth -1,angle1);
-    drawFractalTree(g, x2, y2, angle - angle1, depth - 1,angle1);
-   }
-    else
-        return;
-  }
+        if (depth != 0) {
+            //Thread.sleep(100);//It has a catch exception here;
+            int x2 = (int) (x1 + (Math.cos(Math.toRadians(angle)) * depth * 10.0));
+            int y2 = (int) (y1 + (Math.sin(Math.toRadians(angle)) * depth * 10.0));
+
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.drawLine(x1, y1, x2, y2);
+            repaint();
+            drawFractalTree(g, x2, y2, angle + angle1, depth - 1, angle1);
+            drawFractalTree(g, x2, y2, angle - angle1, depth - 1, angle1);
+        } else
+            return;
+    }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -182,7 +224,7 @@ private final int WINDOW_HEIGHT = 720;
         setTitle("Fractal");
         setBackground(new java.awt.Color(204, 255, 204));
 
-        alturaSlicer.setMaximum(12);
+        alturaSlicer.setMaximum(10);
         alturaSlicer.setMinimum(1);
         alturaSlicer.setOrientation(javax.swing.JSlider.VERTICAL);
 
@@ -199,28 +241,28 @@ private final int WINDOW_HEIGHT = 720;
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(332, Short.MAX_VALUE)
-                .addComponent(cantidadRamasSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(aperturaAngulosSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(inclinacionSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(alturaSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                                .addContainerGap(332, Short.MAX_VALUE)
+                                .addComponent(cantidadRamasSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(aperturaAngulosSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(inclinacionSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(alturaSlicer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(aperturaAngulosSlicer, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
-            .addComponent(inclinacionSlicer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(alturaSlicer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(cantidadRamasSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(aperturaAngulosSlicer, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE)
+                        .addComponent(inclinacionSlicer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(alturaSlicer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cantidadRamasSlider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSlider alturaSlicer;
@@ -228,4 +270,5 @@ private final int WINDOW_HEIGHT = 720;
     private javax.swing.JSlider cantidadRamasSlider;
     private javax.swing.JSlider inclinacionSlicer;
     // End of variables declaration//GEN-END:variables
+
 }
